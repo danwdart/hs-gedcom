@@ -1,5 +1,5 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE OverloadedStrings          #-}
 
 -- |
 -- Module: Data.Gedcom.ParseMonads
@@ -25,17 +25,22 @@ module Data.Gedcom.Internal.ParseMonads
   )
 where
 
-import Control.Monad (when)
-import Control.Monad.Except (ExceptT (..), MonadError (throwError), MonadTrans (lift), runExceptT)
-import Control.Monad.State (MonadState (get, put), State, StateT (StateT), evalStateT, modify, runState)
-import Data.Dynamic (Dynamic, Typeable, toDyn)
-import Data.Either (partitionEithers)
-import Data.Foldable (foldrM)
-import Data.Gedcom.Internal.CoreTypes (GDError (DuplicateRef, TagError), GDTag, GDTree, GDXRefID)
-import Data.Map (Map)
-import qualified Data.Map as M
-import Data.Maybe (isJust)
-import qualified Data.Text as T
+import           Control.Monad                  (when)
+import           Control.Monad.Except           (ExceptT (..),
+                                                 MonadError (throwError),
+                                                 MonadTrans (lift), runExceptT)
+import           Control.Monad.State            (MonadState (get, put), State,
+                                                 StateT (StateT), evalStateT,
+                                                 modify, runState)
+import           Data.Dynamic                   (Dynamic, Typeable, toDyn)
+import           Data.Either                    (partitionEithers)
+import           Data.Foldable                  (foldrM)
+import           Data.Gedcom.Internal.CoreTypes (GDError (DuplicateRef, TagError),
+                                                 GDTag, GDTree, GDXRefID)
+import           Data.Map                       (Map)
+import qualified Data.Map                       as M
+import           Data.Maybe                     (isJust)
+import qualified Data.Text                      as T
 
 -- | A parser that extracts a GEDCOM structure from a GEDCOM subtree.
 type StructureParser a =
@@ -60,7 +65,7 @@ runMultiMonad children (MultiMonad m) =
   (flip evalStateT children . runExceptT $ m) >>= rethrowError
   where
     rethrowError x = case x of
-      Left e -> throwError e
+      Left e  -> throwError e
       Right v -> pure v
 
 -- | Parse multiple instances of a structure
@@ -89,10 +94,10 @@ parseOptional p = MultiMonad $ do
   lift $ put leftover
   pure mr
   where
-    toMaybe (Left _) = Nothing
+    toMaybe (Left _)  = Nothing
     toMaybe (Right v) = Just v
     pick v rest Nothing = (Nothing, v : rest)
-    pick _ rest x = (x, rest)
+    pick _ rest x       = (x, rest)
 
 -- | Parse a required instance of a structure
 parseRequired ::

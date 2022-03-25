@@ -24,23 +24,33 @@ module Data.Gedcom.Internal.Parser
   )
 where
 
-import Control.Applicative (Alternative ((<|>)), optional)
-import Control.Monad.Except (MonadError (throwError))
-import Data.Bifunctor (Bifunctor (bimap, first, second))
-import Data.Dynamic (Dynamic, Typeable)
-import Data.Gedcom.Internal.Common (Parser, dateExact, month, monthFr, monthHeb, showt, timeToPicos, timeValue, trim, yearGreg)
-import qualified Data.Gedcom.Internal.CoreTypes as G
-import Data.Gedcom.Internal.LineParser (gdDelim)
-import Data.Gedcom.Internal.ParseMonads (MultiMonad, StructureMonad, StructureParser, addReference, parseMulti, parseOptional, parseRequired, runMultiMonad, runStructure)
-import qualified Data.Gedcom.Structure as G
-import Data.Map (Map)
-import Data.Maybe (fromMaybe, isJust, mapMaybe)
-import Data.Text (Text)
-import qualified Data.Text as T
-import Data.Time.Calendar (fromGregorian)
-import Data.Time.Clock (UTCTime (UTCTime), secondsToDiffTime)
-import Text.Megaparsec (MonadParsec (try), anySingle, count', many, parseMaybe)
-import Text.Megaparsec.Char (digitChar, string')
+import           Control.Applicative              (Alternative ((<|>)),
+                                                   optional)
+import           Control.Monad.Except             (MonadError (throwError))
+import           Data.Bifunctor                   (Bifunctor (bimap, first, second))
+import           Data.Dynamic                     (Dynamic, Typeable)
+import           Data.Gedcom.Internal.Common      (Parser, dateExact, month,
+                                                   monthFr, monthHeb, showt,
+                                                   timeToPicos, timeValue, trim,
+                                                   yearGreg)
+import qualified Data.Gedcom.Internal.CoreTypes   as G
+import           Data.Gedcom.Internal.LineParser  (gdDelim)
+import           Data.Gedcom.Internal.ParseMonads (MultiMonad, StructureMonad,
+                                                   StructureParser,
+                                                   addReference, parseMulti,
+                                                   parseOptional, parseRequired,
+                                                   runMultiMonad, runStructure)
+import qualified Data.Gedcom.Structure            as G
+import           Data.Map                         (Map)
+import           Data.Maybe                       (fromMaybe, isJust, mapMaybe)
+import           Data.Text                        (Text)
+import qualified Data.Text                        as T
+import           Data.Time.Calendar               (fromGregorian)
+import           Data.Time.Clock                  (UTCTime (UTCTime),
+                                                   secondsToDiffTime)
+import           Text.Megaparsec                  (MonadParsec (try), anySingle,
+                                                   count', many, parseMaybe)
+import           Text.Megaparsec.Char             (digitChar, string')
 
 -- | Parse a 'G.Gedcom' value from the raw GEDCOM syntax tree.
 parseGedcom :: G.GDRoot -> (Either G.GDError G.Gedcom, Map G.GDXRefID Dynamic)
@@ -327,17 +337,17 @@ parsePhoneticType :: StructureParser G.PhoneticType
 parsePhoneticType = parseNoLinkTag (G.GDTag "TYPE") $ \(t, _) ->
   pure $ case trim . T.toUpper . G.gdIgnoreEscapes $ t of
     "HANGUL" -> G.Hangul
-    "KANA" -> G.Kana
-    v -> G.PhoneticType v
+    "KANA"   -> G.Kana
+    v        -> G.PhoneticType v
 
 -- | Parse a 'G.RomanType'.
 parseRomanType :: StructureParser G.RomanType
 parseRomanType = parseNoLinkTag (G.GDTag "TYPE") $ \(t, _) ->
   pure $ case trim . T.toUpper . G.gdIgnoreEscapes $ t of
-    "PINYIN" -> G.Pinyin
-    "ROMAJI" -> G.Romaji
+    "PINYIN"    -> G.Pinyin
+    "ROMAJI"    -> G.Romaji
     "WADEGILES" -> G.WadeGiles
-    v -> G.RomanType v
+    v           -> G.RomanType v
 
 -- | Parse a 'G.MapCoord'.
 parseMapCoord :: StructureParser G.MapCoord
@@ -389,7 +399,7 @@ getPersonalName = G.Name <$> reformat <*> (getMiddle . T.splitOn "/")
   where
     reformat = T.unwords . T.words . T.map (\c -> if c == '/' then ' ' else c)
     getMiddle [_, m, _] = Just $ trim m
-    getMiddle _ = Nothing
+    getMiddle _         = Nothing
 
 -- | Parse a 'G.NameType'.
 parseNameType :: StructureParser G.NameType
@@ -443,7 +453,7 @@ parseSex = parseNoLinkTag (G.GDTag "SEX") $ \(t, _) ->
     "M" -> pure G.Male
     "F" -> pure G.Female
     "U" -> pure G.Undetermined
-    _ -> throwError . G.FormatError $ "Unknown sex code " <> showt t
+    _   -> throwError . G.FormatError $ "Unknown sex code " <> showt t
 
 -- | Parse a list of 'G.IndividualAttribute's.
 parseIndividualAttribute :: MultiMonad [G.IndividualAttribute]
@@ -533,7 +543,7 @@ parseIndividualEvent = do
         "HUSB" -> pure G.Husband
         "WIFE" -> pure G.Wife
         "BOTH" -> pure G.BothParents
-        _ -> throwError . G.FormatError $ "Invalid parent " <> showt t
+        _      -> throwError . G.FormatError $ "Invalid parent " <> showt t
 
 -- | Parse an 'G.IndividualEventDetail'.
 parseIndividualEventDetail :: MultiMonad G.IndividualEventDetail
@@ -618,7 +628,7 @@ parseRepositoryCitation :: StructureParser G.RepositoryCitation
 parseRepositoryCitation = parseTagFull (G.GDTag "REPO") nullrref $
   \(lb, children) ->
     let repo = case lb of
-          Left v -> Just v
+          Left v  -> Just v
           Right _ -> Nothing
      in runMultiMonad children $
           G.RepositoryCitation repo
@@ -724,12 +734,12 @@ decodeCalendarEscape :: Maybe G.GDEscape -> G.Calendar
 decodeCalendarEscape Nothing = G.Gregorian
 decodeCalendarEscape (Just (G.GDEscape c)) = case T.toUpper c of
   "DGREGORIAN" -> G.Gregorian
-  "DJULIAN" -> G.Julian
-  "DHEBREW" -> G.Hebrew
-  "DFRENCH" -> G.French
-  "DROMAN" -> G.Julian
-  "DUNKNOWN" -> G.Gregorian
-  _ -> G.Gregorian
+  "DJULIAN"    -> G.Julian
+  "DHEBREW"    -> G.Hebrew
+  "DFRENCH"    -> G.French
+  "DROMAN"     -> G.Julian
+  "DUNKNOWN"   -> G.Gregorian
+  _            -> G.Gregorian
 
 -- | Prepare text for parsing a 'G.DateValue'.
 prepareDateText :: [(Maybe G.GDEscape, Text)] -> [(Maybe G.GDEscape, Text)]
@@ -814,7 +824,7 @@ parseDateApprox t = case prepareDateText t of
           "ABT" -> Just G.DateAbout
           "CAL" -> Just G.DateCalculated
           "EST" -> Just G.DateEstimated
-          _ -> Nothing
+          _     -> Nothing
      in cons <*> getDate calendar1 date
   _ -> Nothing
 
@@ -852,7 +862,7 @@ getDate calendar = parseMaybe parser
   where
     yearParser = case calendar of
       G.Gregorian -> yearGreg
-      _ -> read <$> count' 1 4 digitChar
+      _           -> read <$> count' 1 4 digitChar
     parseYear =
       (\y bc -> G.Year $ if bc then negate y else y)
         <$> yearParser <*> ((True <$ "B.C.") <|> pure False)
@@ -874,9 +884,9 @@ getDate calendar = parseMaybe parser
             )
     parseMonth = case calendar of
       G.Gregorian -> month
-      G.Julian -> month
-      G.Hebrew -> monthHeb
-      G.French -> monthFr
+      G.Julian    -> month
+      G.Hebrew    -> monthHeb
+      G.French    -> monthFr
 
 -- | Parse an exact date.
 parseExactDate :: StructureParser UTCTime
@@ -946,7 +956,7 @@ parseMultimediaFile typeTag mf = parseNoLinkTag (G.GDTag "FILE") $
           <*> parseOptional (parseTextTag (G.GDTag "TITL"))
     case mc <|> mf of
       Nothing -> throwError . G.TagError $ "Missing FORM tag for file format"
-      Just c -> pure $ G.MultimediaFile (G.gdIgnoreEscapes name) c title
+      Just c  -> pure $ G.MultimediaFile (G.gdIgnoreEscapes name) c title
 
 -- | Parse a 'G.MultimediaFormat'.
 parseMultimediaFormat :: G.GDTag -> StructureParser G.MultimediaFormat
@@ -1118,7 +1128,7 @@ parseWordTag :: G.GDTag -> StructureParser Word
 parseWordTag tag = parseNoLinkTag tag $ \(v, _) ->
   case parseMaybe parser (G.gdIgnoreEscapes v) of
     Nothing -> throwError . G.FormatError $ "Expected number, saw " <> showt v
-    Just n -> pure . read $ n
+    Just n  -> pure . read $ n
   where
     parser :: Parser String
     parser = Text.Megaparsec.many digitChar
@@ -1133,7 +1143,7 @@ parseListTag tag =
   parseNoLinkTag tag (pure . split . trim . G.gdIgnoreEscapes . fst)
   where
     split "" = []
-    split s = T.splitOn "," s
+    split s  = T.splitOn "," s
 
 -- | Handler for tags that cannot contain cross references.
 type NoLinkHandler a =
@@ -1169,7 +1179,7 @@ parseTag ::
   StructureParser (G.GDRef a)
 parseTag tag handler = parseTagFull tag defrref $ \(lb, children) ->
   case lb of
-    Left ref -> pure ref
+    Left ref   -> pure ref
     Right text -> G.GDStructure <$> handler (text, children)
 
 -- | Parse a tag which cannot contain a cross reference (i.e. the tag must
@@ -1218,7 +1228,7 @@ parseTagFull tag rref handler t@(G.GDTree (G.GDLine _ mthisID tag' v) children) 
           Right <$> (handler . first Right $ parseCont l1 children)
       case (mthisID, r) of
         (Just thisID, Right rv) -> rref tag thisID rv
-        _ -> pure ()
+        _                       -> pure ()
       pure r
 
 -- | Handle CONT and CONC tags.

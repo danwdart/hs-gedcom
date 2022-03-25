@@ -23,16 +23,16 @@ module Data.Gedcom.Internal.Common
   )
 where
 
-import Control.Applicative (Alternative ((<|>)), optional)
-import Data.Char (isSpace)
-import Data.Functor (($>))
-import Data.Maybe (fromMaybe)
-import Data.Text (Text)
-import qualified Data.Text as T
-import Data.Time.Clock (DiffTime, picosecondsToDiffTime)
-import Data.Void (Void)
-import Text.Megaparsec (Parsec, count, count')
-import Text.Megaparsec.Char (char, digitChar, space, string')
+import           Control.Applicative  (Alternative ((<|>)), optional)
+import           Data.Char            (isSpace)
+import           Data.Functor         (($>))
+import           Data.Maybe           (fromMaybe)
+import           Data.Text            (Text)
+import qualified Data.Text            as T
+import           Data.Time.Clock      (DiffTime, picosecondsToDiffTime)
+import           Data.Void            (Void)
+import           Text.Megaparsec      (Parsec, count, count')
+import           Text.Megaparsec.Char (char, digitChar, space, string')
 
 -- | Parsers from 'Text' using the default error component.
 type Parser = Parsec Void Text
@@ -141,4 +141,4 @@ yearGreg = do
   malt <- optional $ char '/' *> (read <$> count 2 digitChar)
   case malt of
     Just alt -> pure $ if (y + 1) `mod` 100 == alt then y + 1 else y
-    Nothing -> pure y
+    Nothing  -> pure y

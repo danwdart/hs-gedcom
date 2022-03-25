@@ -18,15 +18,15 @@ module Data.Text.Encoding.ANSEL
   )
 where
 
-import Control.Monad.Loops (whileM)
-import Control.Monad.State (State, evalState, gets, put)
-import Data.Array (Array, accumArray, (!))
-import Data.ByteString (ByteString)
-import qualified Data.ByteString as B
-import Data.Functor (($>))
-import Data.Text (Text)
-import qualified Data.Text as T
-import Data.Word (Word8)
+import           Control.Monad.Loops (whileM)
+import           Control.Monad.State (State, evalState, gets, put)
+import           Data.Array          (Array, accumArray, (!))
+import           Data.ByteString     (ByteString)
+import qualified Data.ByteString     as B
+import           Data.Functor        (($>))
+import           Data.Text           (Text)
+import qualified Data.Text           as T
+import           Data.Word           (Word8)
 
 -- | Decode an ANSEL string to Unicode
 decodeANSEL ::

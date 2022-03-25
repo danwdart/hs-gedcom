@@ -1,5 +1,5 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE OverloadedStrings          #-}
 
 -- |
 -- Module: Data.Gedcom.Common
@@ -29,12 +29,12 @@ module Data.Gedcom.Internal.CoreTypes
   )
 where
 
-import Control.Arrow (Arrow (first))
-import Data.Char (isSpace)
-import Data.List (foldl', groupBy)
-import Data.Text (Text)
-import qualified Data.Text as T
-import Data.Typeable (TypeRep)
+import           Control.Arrow (Arrow (first))
+import           Data.Char     (isSpace)
+import           Data.List     (foldl', groupBy)
+import           Data.Text     (Text)
+import qualified Data.Text     as T
+import           Data.Typeable (TypeRep)
 
 -- | An error arising from dereferencing a 'GDRef'
 data GDRefError
@@ -117,17 +117,17 @@ instance Semigroup GDLineItem where
   (GDLineItem l1) <> (GDLineItem l2) =
     GDLineItem . fmap coalease . groupBy canCoalease $ l1 <> l2
     where
-      coalease [] = (Nothing, "")
+      coalease []       = (Nothing, "")
       coalease (l : ls) = foldl' (\(_, t1) (e, t2) -> (e, t1 <> t2)) l ls
       canCoalease (Nothing, _) (_, _) = True
-      canCoalease _ _ = False
+      canCoalease _ _                 = False
 
 -- | Trim white space off the start an end of a GEDCOM line text.
 gdTrimLineItem :: GDLineItem -> GDLineItem
 gdTrimLineItem (GDLineItem []) = GDLineItem []
 gdTrimLineItem (GDLineItem ((e, t) : rst)) =
   let rst' = reverse $ case reverse rst of
-        [] -> []
+        []                 -> []
         ((e', t') : rst'') -> (e', T.dropWhile isSpace t') : rst''
    in GDLineItem $ (e, T.dropWhile isSpace t) : rst'
 
@@ -142,4 +142,4 @@ gdFilterEscapes escapes =
   gdLineData . mconcat . fmap (GDLineItem . (: []) . first f)
   where
     f (Just e) = if e `elem` escapes then Just e else Nothing
-    f Nothing = Nothing
+    f Nothing  = Nothing

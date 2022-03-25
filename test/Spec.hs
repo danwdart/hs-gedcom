@@ -1,14 +1,19 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-import Data.Gedcom.Internal.Common (showt)
-import qualified Data.Gedcom.Internal.CoreTypes as G
-import Data.Gedcom.Internal.LineParser (gdRoot)
-import Data.Gedcom.Internal.ParseMonads (StructureParser, runStructure)
-import Data.Gedcom.Internal.Parser (parseBoolTag, parseLinkTag, parseListTag, parseNoLinkTag, parseTag, parseTextTag, parseWordTag)
-import Data.Text (Text)
-import Data.Void (Void)
-import Test.Hspec (describe, hspec, it, shouldBe)
-import Text.Megaparsec (parseMaybe)
+import           Data.Gedcom.Internal.Common      (showt)
+import qualified Data.Gedcom.Internal.CoreTypes   as G
+import           Data.Gedcom.Internal.LineParser  (gdRoot)
+import           Data.Gedcom.Internal.ParseMonads (StructureParser,
+                                                   runStructure)
+import           Data.Gedcom.Internal.Parser      (parseBoolTag, parseLinkTag,
+                                                   parseListTag, parseNoLinkTag,
+                                                   parseTag, parseTextTag,
+                                                   parseWordTag)
+import           Data.Text                        (Text)
+import           Data.Void                        (Void)
+import           Test.Hspec                       (describe, hspec, it,
+                                                   shouldBe)
+import           Text.Megaparsec                  (parseMaybe)
 
 testTagData :: Text
 testTagData = "some test data"
@@ -50,14 +55,14 @@ data ParseReturn a
 
 isError :: ParseReturn a -> Bool
 isError (Error _) = True
-isError _ = False
+isError _         = False
 
 parseStructure :: Maybe G.GDTree -> StructureParser a -> ParseReturn a
 parseStructure Nothing _ = Error "Line parse error"
 parseStructure (Just v) p = case runStructure (p v) of
-  (Right (Left _), _) -> NoMatch
+  (Right (Left _), _)  -> NoMatch
   (Right (Right m), _) -> Match m
-  (Left err, _) -> Error $ showt err
+  (Left err, _)        -> Error $ showt err
 
 noEscapes :: Text -> [(Maybe G.GDEscape, Text)]
 noEscapes v = [(Nothing, v)]

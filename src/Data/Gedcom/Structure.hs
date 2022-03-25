@@ -95,44 +95,44 @@ module Data.Gedcom.Structure
   )
 where
 
-import Data.Gedcom.Internal.CoreTypes (GDRef)
-import Data.Text (Text)
-import Data.Time.Clock (UTCTime)
+import           Data.Gedcom.Internal.CoreTypes (GDRef)
+import           Data.Text                      (Text)
+import           Data.Time.Clock                (UTCTime)
 
 -- | The root structure
 data Gedcom = Gedcom
-  { gedcomHeader :: Header,
-    gedcomFamily :: [GDRef Family],
+  { gedcomHeader     :: Header,
+    gedcomFamily     :: [GDRef Family],
     gedcomIndividual :: [GDRef Individual],
     gedcomMultimedia :: [GDRef Multimedia],
-    gedcomNote :: [GDRef Note],
+    gedcomNote       :: [GDRef Note],
     gedcomRepository :: [GDRef Repository],
-    gedcomSource :: [GDRef Source],
-    gedcomSubmitter :: [GDRef Submitter]
+    gedcomSource     :: [GDRef Source],
+    gedcomSubmitter  :: [GDRef Submitter]
   }
   deriving (Show)
 
 -- | The header
 data Header = Header
-  { headerSource :: HeaderSource,
-    headerDestination :: Maybe Text,
-    headerDate :: Maybe UTCTime,
-    headerSubmitter :: GDRef Submitter,
-    headerSubmission :: Maybe (GDRef Submission),
-    headerFile :: Maybe FilePath,
-    headerCopyright :: Maybe Text,
+  { headerSource       :: HeaderSource,
+    headerDestination  :: Maybe Text,
+    headerDate         :: Maybe UTCTime,
+    headerSubmitter    :: GDRef Submitter,
+    headerSubmission   :: Maybe (GDRef Submission),
+    headerFile         :: Maybe FilePath,
+    headerCopyright    :: Maybe Text,
     headerGedcomFormat :: GedcomFormat,
-    headerCharset :: Charset,
-    headerLang :: Maybe Language,
-    headerPlaceForm :: Maybe [Text],
-    headerNote :: Maybe Text
+    headerCharset      :: Charset,
+    headerLang         :: Maybe Language,
+    headerPlaceForm    :: Maybe [Text],
+    headerNote         :: Maybe Text
   }
   deriving (Show)
 
 -- | The database format and version number
 data GedcomFormat = GedcomFormat
   { gedcomVersion :: Text,
-    gedcomForm :: GedcomForm
+    gedcomForm    :: GedcomForm
   }
   deriving (Show)
 
@@ -146,24 +146,24 @@ data GedcomForm
 -- file)
 data HeaderSource = HeaderSource
   { headerSourceSystemID :: Text,
-    headerSourceVersion :: Maybe Text,
-    headerSourceName :: Maybe Text,
-    headerSourceCorp :: Maybe Corp,
-    headerSourceData :: Maybe HeaderSourceData
+    headerSourceVersion  :: Maybe Text,
+    headerSourceName     :: Maybe Text,
+    headerSourceCorp     :: Maybe Corp,
+    headerSourceData     :: Maybe HeaderSourceData
   }
   deriving (Show)
 
 -- | Information about a corporation
 data Corp = Corp
-  { corpName :: Text,
+  { corpName    :: Text,
     corpAddress :: Maybe Address
   }
   deriving (Show)
 
 -- | Information about the source of this GEDCOM data
 data HeaderSourceData = HeaderSourceData
-  { headerSourceDataName :: Text,
-    headerSourceDataDate :: Maybe UTCTime,
+  { headerSourceDataName      :: Text,
+    headerSourceDataDate      :: Maybe UTCTime,
     headerSourceDataCopyright :: Maybe Text
   }
   deriving (Show)
@@ -171,122 +171,122 @@ data HeaderSourceData = HeaderSourceData
 -- | The family record
 data Family = Family
   { familyRestrictionNotice :: Maybe RestrictionNotice,
-    familyEvent :: [FamilyEvent],
-    familyHusband :: Maybe (GDRef Individual),
-    familyWife :: Maybe (GDRef Individual),
-    familyChildren :: [GDRef Individual],
-    familyTotalChildren :: Maybe Word,
-    familySubitter :: [GDRef Submitter],
-    familyUserReference :: [UserReference],
-    familyRIN :: Maybe RIN,
-    familyChangeDate :: Maybe ChangeDate,
-    familyNote :: [GDRef Note],
-    familySourceCitation :: [SourceCitation],
-    familyMultimedia :: [GDRef Multimedia]
+    familyEvent             :: [FamilyEvent],
+    familyHusband           :: Maybe (GDRef Individual),
+    familyWife              :: Maybe (GDRef Individual),
+    familyChildren          :: [GDRef Individual],
+    familyTotalChildren     :: Maybe Word,
+    familySubitter          :: [GDRef Submitter],
+    familyUserReference     :: [UserReference],
+    familyRIN               :: Maybe RIN,
+    familyChangeDate        :: Maybe ChangeDate,
+    familyNote              :: [GDRef Note],
+    familySourceCitation    :: [SourceCitation],
+    familyMultimedia        :: [GDRef Multimedia]
   }
   deriving (Show)
 
 -- | The individual record
 data Individual = Individual
-  { individualRestrictionNotice :: Maybe RestrictionNotice,
-    individualName :: Maybe PersonalName,
-    individualSex :: Maybe Sex,
-    individualEvent :: [IndividualEvent],
-    individualAttribute :: [IndividualAttribute],
-    individualChildToFamilyLink :: [ChildToFamilyLink],
+  { individualRestrictionNotice  :: Maybe RestrictionNotice,
+    individualName               :: Maybe PersonalName,
+    individualSex                :: Maybe Sex,
+    individualEvent              :: [IndividualEvent],
+    individualAttribute          :: [IndividualAttribute],
+    individualChildToFamilyLink  :: [ChildToFamilyLink],
     individualSpouseToFamilyLink :: [SpouseToFamilyLink],
-    individualSubmitter :: [GDRef Submitter],
-    individualAssociation :: [Association],
-    individualAlias :: [GDRef Individual],
-    individualAncestorInterest :: [GDRef Submitter],
+    individualSubmitter          :: [GDRef Submitter],
+    individualAssociation        :: [Association],
+    individualAlias              :: [GDRef Individual],
+    individualAncestorInterest   :: [GDRef Submitter],
     individualDescendantInterest :: [GDRef Submitter],
-    individualRFN :: Maybe RFN,
-    individualAFN :: Maybe AFN,
-    individualUserReference :: [UserReference],
-    individualRIN :: Maybe RIN,
-    individualChangeDate :: Maybe ChangeDate,
-    individualNote :: [GDRef Note],
-    individualSourceCitation :: [SourceCitation],
-    individualMultimedia :: [GDRef Multimedia]
+    individualRFN                :: Maybe RFN,
+    individualAFN                :: Maybe AFN,
+    individualUserReference      :: [UserReference],
+    individualRIN                :: Maybe RIN,
+    individualChangeDate         :: Maybe ChangeDate,
+    individualNote               :: [GDRef Note],
+    individualSourceCitation     :: [SourceCitation],
+    individualMultimedia         :: [GDRef Multimedia]
   }
   deriving (Show)
 
 -- | The multimedia record (for linking multimedia files)
 data Multimedia = Multimedia
-  { multimediaFile :: [MultimediaFile],
-    multimediaTitl :: Maybe Text,
-    multimediaUserReference :: [UserReference],
-    multimediaRIN :: Maybe RIN,
-    multimediaNote :: [GDRef Note],
+  { multimediaFile           :: [MultimediaFile],
+    multimediaTitl           :: Maybe Text,
+    multimediaUserReference  :: [UserReference],
+    multimediaRIN            :: Maybe RIN,
+    multimediaNote           :: [GDRef Note],
     multimediaSourceCitation :: [SourceCitation],
-    multimediaChangeDate :: Maybe ChangeDate
+    multimediaChangeDate     :: Maybe ChangeDate
   }
   deriving (Show)
 
 -- | The note record (for attaching notes to other records)
 data Note = Note
-  { noteText :: Text,
-    noteUserReference :: [UserReference],
-    noteRIN :: Maybe RIN,
+  { noteText           :: Text,
+    noteUserReference  :: [UserReference],
+    noteRIN            :: Maybe RIN,
     noteSourceCitation :: [SourceCitation],
-    noteChangeDate :: Maybe ChangeDate
+    noteChangeDate     :: Maybe ChangeDate
   }
   deriving (Show)
 
 -- | The repository record.  Represents a repository of sources (for example a
 -- collection of documents or a physical library)
 data Repository = Repository
-  { repositoryName :: Text,
-    repositoryAddress :: Maybe Address,
-    repositoryNote :: [GDRef Note],
+  { repositoryName          :: Text,
+    repositoryAddress       :: Maybe Address,
+    repositoryNote          :: [GDRef Note],
     repositoryUserReference :: [UserReference],
-    repositoryRIN :: Maybe RIN,
-    repositoryChangeDate :: Maybe ChangeDate
+    repositoryRIN           :: Maybe RIN,
+    repositoryChangeDate    :: Maybe ChangeDate
   }
   deriving (Show)
 
 -- | The source record.  A source of information that may be cited by other
 -- records.
 data Source = Source
-  { sourceData :: Maybe SourceData,
-    sourceAuthor :: Maybe Text,
-    sourceTitle :: Maybe Text,
-    sourceShortTitle :: Maybe Text,
-    sourcePublicationFacts :: Maybe Text,
-    sourceText :: Maybe Text,
+  { sourceData                :: Maybe SourceData,
+    sourceAuthor              :: Maybe Text,
+    sourceTitle               :: Maybe Text,
+    sourceShortTitle          :: Maybe Text,
+    sourcePublicationFacts    :: Maybe Text,
+    sourceText                :: Maybe Text,
     sourceRepositoryCitations :: [RepositoryCitation],
-    sourceUserReference :: [UserReference],
-    sourceRIN :: Maybe RIN,
-    sourceChangeDate :: Maybe ChangeDate,
-    sourceNote :: [GDRef Note],
-    sourceMultimedia :: [GDRef Multimedia]
+    sourceUserReference       :: [UserReference],
+    sourceRIN                 :: Maybe RIN,
+    sourceChangeDate          :: Maybe ChangeDate,
+    sourceNote                :: [GDRef Note],
+    sourceMultimedia          :: [GDRef Multimedia]
   }
   deriving (Show)
 
 -- | The submission record.  Information about this file.
 data Submission = Submission
-  { submissionSubmitter :: Maybe (GDRef Submitter),
-    submissionFamilyFile :: Maybe Text,
-    submissionTempleCode :: Maybe Text,
-    submissionAncestorGenerations :: Maybe Word,
+  { submissionSubmitter             :: Maybe (GDRef Submitter),
+    submissionFamilyFile            :: Maybe Text,
+    submissionTempleCode            :: Maybe Text,
+    submissionAncestorGenerations   :: Maybe Word,
     submissionDescendentGenerations :: Maybe Word,
-    submissionOrdinanceProcessing :: Maybe Bool,
-    submissionRIN :: Maybe RIN,
-    submissionNote :: [GDRef Note],
-    submissionChangeDate :: Maybe ChangeDate
+    submissionOrdinanceProcessing   :: Maybe Bool,
+    submissionRIN                   :: Maybe RIN,
+    submissionNote                  :: [GDRef Note],
+    submissionChangeDate            :: Maybe ChangeDate
   }
   deriving (Show)
 
 -- | The submitter record.  Information about someone who submitted data to
 -- this database.
 data Submitter = Submitter
-  { submitterName :: Name,
-    submitterAddress :: Maybe Address,
-    submitterMedia :: Maybe (GDRef Multimedia),
-    submitterLang :: [Language],
-    submitterRFN :: Maybe RFN,
-    submitterRIN :: Maybe RIN,
-    submitterNote :: [GDRef Note],
+  { submitterName       :: Name,
+    submitterAddress    :: Maybe Address,
+    submitterMedia      :: Maybe (GDRef Multimedia),
+    submitterLang       :: [Language],
+    submitterRFN        :: Maybe RFN,
+    submitterRIN        :: Maybe RIN,
+    submitterNote       :: [GDRef Note],
     submitterChangeDate :: Maybe ChangeDate
   }
   deriving (Show)
@@ -294,35 +294,35 @@ data Submitter = Submitter
 -- | Extra data about a source.
 data SourceData = SourceData
   { sourceDataEventsRecorded :: [SourceRecordedEvent],
-    sourceDataAgency :: Maybe Text,
-    sourceDataNote :: [GDRef Note]
+    sourceDataAgency         :: Maybe Text,
+    sourceDataNote           :: [GDRef Note]
   }
   deriving (Show)
 
 -- | Information about what events are recorded in a source.
 data SourceRecordedEvent = SourceRecordedEvent
   { sourceRecordedEventType :: [EventType],
-    sourceRecordedDate :: Maybe DatePeriod,
-    sourceRecordedPlace :: Maybe [Text]
+    sourceRecordedDate      :: Maybe DatePeriod,
+    sourceRecordedPlace     :: Maybe [Text]
   }
   deriving (Show)
 
 -- | An association between individuals.
 data Association = Association
   { associationIndividual :: GDRef Individual,
-    associationRelation :: Text,
-    associationCitation :: [SourceCitation],
-    associationNote :: [GDRef Note]
+    associationRelation   :: Text,
+    associationCitation   :: [SourceCitation],
+    associationNote       :: [GDRef Note]
   }
   deriving (Show)
 
 -- | A link from an individual to a family record where they are registered as
 -- a child.
 data ChildToFamilyLink = ChildToFamilyLink
-  { childLinkFamily :: GDRef Family,
+  { childLinkFamily   :: GDRef Family,
     childLinkPedigree :: Maybe Pedigree,
-    childLinkStatus :: Maybe ChildLinkStatus,
-    childLinkNote :: [GDRef Note]
+    childLinkStatus   :: Maybe ChildLinkStatus,
+    childLinkNote     :: [GDRef Note]
   }
   deriving (Show)
 
@@ -330,37 +330,37 @@ data ChildToFamilyLink = ChildToFamilyLink
 -- a spouse.
 data SpouseToFamilyLink = SpouseToFamilyLink
   { spouseToFamilyLinkFamily :: GDRef Family,
-    spouseToFamilyLinkNote :: [GDRef Note]
+    spouseToFamilyLinkNote   :: [GDRef Note]
   }
   deriving (Show)
 
 -- | Details about an event.
 data EventDetail = EventDetail
-  { eventDetailType :: Maybe Text,
-    eventDetailDate :: Maybe DateValue,
-    eventDetailPlace :: Maybe Place,
-    eventDetailAddress :: Maybe Address,
-    eventDetailAgency :: Maybe Text,
-    eventDetailReligion :: Maybe Text,
-    eventDetailCause :: Maybe Text,
+  { eventDetailType              :: Maybe Text,
+    eventDetailDate              :: Maybe DateValue,
+    eventDetailPlace             :: Maybe Place,
+    eventDetailAddress           :: Maybe Address,
+    eventDetailAgency            :: Maybe Text,
+    eventDetailReligion          :: Maybe Text,
+    eventDetailCause             :: Maybe Text,
     eventDetailRestrictionNotice :: Maybe RestrictionNotice,
-    eventDetailNote :: [GDRef Note],
-    eventDetailSourceCitation :: [SourceCitation],
-    eventDetailMultimedia :: [GDRef Multimedia]
+    eventDetailNote              :: [GDRef Note],
+    eventDetailSourceCitation    :: [SourceCitation],
+    eventDetailMultimedia        :: [GDRef Multimedia]
   }
   deriving (Show)
 
 -- | Details about a family event.
 data FamilyEventDetail = FamilyEventDetail
   { familyEventDetailAgeHusband :: Maybe Word,
-    familyEventDetailAgeWife :: Maybe Word,
-    familyEventDetailDetail :: EventDetail
+    familyEventDetailAgeWife    :: Maybe Word,
+    familyEventDetailDetail     :: EventDetail
   }
   deriving (Show)
 
 -- | An event concerning a family.
 data FamilyEvent = FamilyEvent
-  { familyEventType :: FamilyEventType,
+  { familyEventType   :: FamilyEventType,
     familyEventDetail :: FamilyEventDetail
   }
   deriving (Show)
@@ -368,50 +368,50 @@ data FamilyEvent = FamilyEvent
 -- | Details about an individual event.
 data IndividualEventDetail = IndividualEventDetail
   { individualEventDetailDetail :: EventDetail,
-    individualEventDetailAge :: Maybe Word
+    individualEventDetailAge    :: Maybe Word
   }
   deriving (Show)
 
 -- | An event concerning an individual.
 data IndividualEvent = IndividualEvent
-  { individualEventType :: IndividualEventType,
+  { individualEventType   :: IndividualEventType,
     individualEventDetail :: IndividualEventDetail
   }
   deriving (Show)
 
 -- | A physical place.
 data Place = Place
-  { placeName :: [Text],
-    placeForm :: Maybe [Text],
+  { placeName     :: [Text],
+    placeForm     :: Maybe [Text],
     placePhonetic :: Maybe PhoneticPlaceName,
-    placeRoman :: Maybe RomanPlaceName,
-    placeMap :: Maybe MapCoord,
-    placeNote :: [GDRef Note]
+    placeRoman    :: Maybe RomanPlaceName,
+    placeMap      :: Maybe MapCoord,
+    placeNote     :: [GDRef Note]
   }
   deriving (Show)
 
 -- | The name of a person.
 data PersonalName = PersonalName
-  { personalNameName :: Name,
-    personalNameType :: Maybe NameType,
-    personalNamePieces :: PersonalNamePieces,
+  { personalNameName     :: Name,
+    personalNameType     :: Maybe NameType,
+    personalNamePieces   :: PersonalNamePieces,
     personalNamePhonetic :: [PhoneticName],
-    personalNameRoman :: [RomanizedName]
+    personalNameRoman    :: [RomanizedName]
   }
   deriving (Show)
 
 -- | A phonetic transcription of a person's name.
 data PhoneticName = PhoneticName
-  { phoneticName :: Name,
-    phoneticType :: PhoneticType,
+  { phoneticName   :: Name,
+    phoneticType   :: PhoneticType,
     phoneticPieces :: PersonalNamePieces
   }
   deriving (Show)
 
 -- | A Roman transliteration of a person's name.
 data RomanizedName = RomanizedName
-  { romanziedName :: Name,
-    romanziedType :: RomanType,
+  { romanziedName   :: Name,
+    romanziedType   :: RomanType,
     romanziedPieces :: PersonalNamePieces
   }
   deriving (Show)
@@ -422,24 +422,24 @@ data PersonalNamePieces = PersonalNamePieces
     -- standard (prefix highlighted in bold):
     --
     -- __Lt. Cmndr.__ Joseph Allen jr.
-    namePiecePrefix :: [Text],
+    namePiecePrefix         :: [Text],
     -- | Given names
-    namePieceGiven :: [Text],
+    namePieceGiven          :: [Text],
     -- | Nicknames
-    namePieceNickname :: [Text],
+    namePieceNickname       :: [Text],
     -- | Surname prefixes.  Example from the GEDCOM standard (surname prefix
     -- highlighted in bold):
     --
     -- __de la__ Cruz
-    namePieceSurnamePrefix :: [Text],
+    namePieceSurnamePrefix  :: [Text],
     -- | Surname or family names
-    namePieceSurname :: [Text],
+    namePieceSurname        :: [Text],
     -- | Parts of the name that come after all other names.  Example from the
     -- GEDCOM standard (suffix highlighted in bold)
     --
     -- Lt. Cmndr. Joseph Allen __jr.__
-    namePieceSuffix :: [Text],
-    namePieceNameNote :: [GDRef Note],
+    namePieceSuffix         :: [Text],
+    namePieceNameNote       :: [GDRef Note],
     namePirceSourceCitation :: [SourceCitation]
   }
   deriving (Show)
@@ -487,30 +487,30 @@ data IndividualAttributeType
 data SourceCitation = SourceCitation
   { -- | Either a description of the source, or a reference to a 'Source' record
     -- which describes the source in more detail.
-    citeSource :: Either SourceDescription (GDRef Source),
-    citePage :: Maybe Text,
+    citeSource     :: Either SourceDescription (GDRef Source),
+    citePage       :: Maybe Text,
     citeMultimedia :: [GDRef Multimedia],
-    citeNote :: [GDRef Note],
-    citeQuality :: Maybe QualityAssessment
+    citeNote       :: [GDRef Note],
+    citeQuality    :: Maybe QualityAssessment
   }
   deriving (Show)
 
 -- | Citation of a repository of source material.
 data RepositoryCitation = RepositoryCitation
   { repoCiteRepository :: Maybe (GDRef Repository),
-    repoCiteNote :: [GDRef Note],
+    repoCiteNote       :: [GDRef Note],
     repoCiteCallNumber :: Maybe CallNumber
   }
   deriving (Show)
 
 -- | An address
 data Address = Address
-  { addressLines :: Text,
-    addressCity :: Maybe Text,
-    addressState :: Maybe Text,
+  { addressLines    :: Text,
+    addressCity     :: Maybe Text,
+    addressState    :: Maybe Text,
     addressPostcode :: Maybe Text,
-    addressCountry :: Maybe Text,
-    addressContact :: ContactDetails
+    addressCountry  :: Maybe Text,
+    addressContact  :: ContactDetails
   }
   deriving (Show)
 
@@ -518,16 +518,16 @@ data Address = Address
 data ContactDetails = ContactDetails
   { addressPhone :: [Text],
     addressEmail :: [Text],
-    addressFax :: [Text],
-    addressWWW :: [Text]
+    addressFax   :: [Text],
+    addressWWW   :: [Text]
   }
   deriving (Show)
 
 -- | Information about a multimedia file
 data MultimediaFile = MultimediaFile
-  { multimediaFileLink :: Text,
+  { multimediaFileLink   :: Text,
     multimediaFileFormat :: MultimediaFormat,
-    multimediaTitle :: Maybe Text
+    multimediaTitle      :: Maybe Text
   }
   deriving (Show)
 

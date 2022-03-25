@@ -1,4 +1,4 @@
-{-# LANGUAGE LambdaCase #-}
+{-# LANGUAGE LambdaCase        #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 -- |
@@ -17,25 +17,18 @@ module Data.Gedcom.Internal.LineParser
   )
 where
 
-import Control.Monad (when)
-import Data.Char (isControl)
-import Data.Functor ((<&>))
-import Data.Gedcom.Internal.Common (Parser)
+import           Control.Monad                  (when)
+import           Data.Char                      (isControl)
+import           Data.Functor                   ((<&>))
+import           Data.Gedcom.Internal.Common    (Parser)
 import qualified Data.Gedcom.Internal.CoreTypes as G
-import Data.Maybe (fromMaybe)
-import Data.Text (Text)
-import qualified Data.Text as T
-import Text.Megaparsec
-  ( MonadParsec (try),
-    count',
-    eitherP,
-    many,
-    optional,
-    satisfy,
-    some,
-    (<|>),
-  )
-import Text.Megaparsec.Char (alphaNumChar, char, digitChar)
+import           Data.Maybe                     (fromMaybe)
+import           Data.Text                      (Text)
+import qualified Data.Text                      as T
+import           Text.Megaparsec                (MonadParsec (try), count',
+                                                 eitherP, many, optional,
+                                                 satisfy, some, (<|>))
+import           Text.Megaparsec.Char           (alphaNumChar, char, digitChar)
 
 -- | Parse any_char.
 gdAnyChar :: Parser Text
@@ -85,7 +78,7 @@ gdPointer = char '@' *> plabel <* char '@'
 gdLineValue :: Parser G.GDLineValue
 gdLineValue =
   eitherP gdPointer gdLineItem <&> \case
-    Left v -> G.GDXRefIDV v
+    Left v  -> G.GDXRefIDV v
     Right v -> G.GDLineItemV v
 
 -- | Parse optional_line_value.
@@ -127,9 +120,9 @@ gdExpandID ::
   G.GDXRefID
 gdExpandID (G.GDXRefID pid) s@(G.GDXRefID sub) =
   case T.uncons sub of
-    Nothing -> s
+    Nothing       -> s
     Just ('!', _) -> G.GDXRefID $ pid <> sub
-    _ -> s
+    _             -> s
 
 -- | Convert local ids to global ids.
 gdExpandPointer ::
@@ -141,7 +134,7 @@ gdExpandPointer ::
   G.GDLineValue
 gdExpandPointer pid v = case v of
   G.GDLineItemV _ -> v
-  G.GDXRefIDV p -> G.GDXRefIDV $ gdExpandID pid p
+  G.GDXRefIDV p   -> G.GDXRefIDV $ gdExpandID pid p
 
 -- | Parse a line at a fixed level
 gdLineLevel ::

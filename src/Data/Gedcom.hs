@@ -1,4 +1,4 @@
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE OverloadedStrings   #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
 -- |
@@ -22,24 +22,25 @@ module Data.Gedcom
   )
 where
 
-import Control.Applicative (Alternative ((<|>)))
-import Data.ByteString (ByteString)
-import qualified Data.ByteString as B
-import Data.Dynamic (Dynamic, Typeable, dynTypeRep, fromDynamic)
-import Data.Either (partitionEithers)
-import Data.Gedcom.Internal.Common (showt)
-import qualified Data.Gedcom.Internal.CoreTypes as G
-import Data.Gedcom.Internal.LineParser (gdRoot)
-import Data.Gedcom.Internal.ParseMonads (runStructure)
-import Data.Gedcom.Internal.Parser (parseGedcom, parseHeader)
-import qualified Data.Gedcom.Structure as G
-import Data.Map (Map)
-import qualified Data.Map as M
-import Data.Maybe (fromMaybe)
-import qualified Data.Text.Encoding as T
-import Data.Text.Encoding.ANSEL (decodeANSEL)
-import Data.Typeable (Proxy (..), typeRep)
-import Text.Megaparsec (runParser)
+import           Control.Applicative              (Alternative ((<|>)))
+import           Data.ByteString                  (ByteString)
+import qualified Data.ByteString                  as B
+import           Data.Dynamic                     (Dynamic, Typeable,
+                                                   dynTypeRep, fromDynamic)
+import           Data.Either                      (partitionEithers)
+import           Data.Gedcom.Internal.Common      (showt)
+import qualified Data.Gedcom.Internal.CoreTypes   as G
+import           Data.Gedcom.Internal.LineParser  (gdRoot)
+import           Data.Gedcom.Internal.ParseMonads (runStructure)
+import           Data.Gedcom.Internal.Parser      (parseGedcom, parseHeader)
+import qualified Data.Gedcom.Structure            as G
+import           Data.Map                         (Map)
+import qualified Data.Map                         as M
+import           Data.Maybe                       (fromMaybe)
+import qualified Data.Text.Encoding               as T
+import           Data.Text.Encoding.ANSEL         (decodeANSEL)
+import           Data.Typeable                    (Proxy (..), typeRep)
+import           Text.Megaparsec                  (runParser)
 
 -- | A table of cross references
 newtype XRefTable = XRefTable (Map G.GDXRefID Dynamic) deriving (Show)
@@ -81,12 +82,12 @@ parseGedcomString mfilename intext =
       encodings = [anselTree, utf8Tree, utf16LETree, utf16BETree]
       charset = foldr (<|>) Nothing . fmap getCharset $ encodings
       trees = case charset of
-        Nothing -> []
-        Just (G.Charset "ANSEL" _) -> [anselTree]
-        Just (G.Charset "UTF-8" _) -> [utf8Tree]
+        Nothing                      -> []
+        Just (G.Charset "ANSEL" _)   -> [anselTree]
+        Just (G.Charset "UTF-8" _)   -> [utf8Tree]
         Just (G.Charset "UNICODE" _) -> [utf8Tree, utf16LETree, utf16BETree]
-        Just (G.Charset "ASCII" _) -> [utf8Tree, anselTree]
-        Just (G.Charset _ _) -> [anselTree, utf8Tree]
+        Just (G.Charset "ASCII" _)   -> [utf8Tree, anselTree]
+        Just (G.Charset _ _)         -> [anselTree, utf8Tree]
    in case partitionEithers trees of
         ([], []) ->
           Left . G.LineFormatError $
@@ -98,12 +99,12 @@ parseGedcomString mfilename intext =
           (_, (gd, table) : _) -> Right (gd, XRefTable table)
   where
     doParseGedcom tree = case parseGedcom tree of
-      (Left err, _) -> Left err
+      (Left err, _)    -> Left err
       (Right v, table) -> Right (v, table)
     getCharset (Right (G.GDRoot (headTree : _))) =
       case runStructure $ parseHeader headTree of
         (Right (Right header), _) -> Just $ G.headerCharset header
-        _ -> Nothing
+        _                         -> Nothing
     getCharset _ = Nothing
 
 -- | Parse Gedcom data from a file
