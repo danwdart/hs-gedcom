@@ -1,6 +1,0 @@
-cradle:
-  stack:
-    - path: "./test"
-      component: "gedcom:test:gedcom-test"
-    - path: "./src"
-      component: "gedcom:lib"

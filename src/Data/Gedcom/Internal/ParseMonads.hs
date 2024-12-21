@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE OverloadedStrings          #-}
 
@@ -26,9 +27,16 @@ module Data.Gedcom.Internal.ParseMonads
 where
 
 import           Control.Monad                  (when)
+#if MIN_VERSION_mtl(2,3,0)
+import           Control.Monad.Except           (ExceptT (..),
+                                                 MonadError (throwError),
+                                                 runExceptT)
+import           Control.Monad.Trans            (lift)
+#else
 import           Control.Monad.Except           (ExceptT (..),
                                                  MonadError (throwError),
                                                  MonadTrans (lift), runExceptT)
+#endif
 import           Control.Monad.State            (MonadState (get, put), State,
                                                  StateT (StateT), evalStateT,
                                                  modify, runState)
